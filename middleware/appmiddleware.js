@@ -19,3 +19,8 @@ export const verifyToken=async(req,res,next)=>{
         return res.json({error})
     }
 }
+
+export const createToken=async(req,res)=>{
+    const token= jwt.sign({email:req.email},process.env.jwt_secret_key,{expiresIn:"1h"})
+    return res.json({message:"Login/SignIn Successfull",token:token})
+}
