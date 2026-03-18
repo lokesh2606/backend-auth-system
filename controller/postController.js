@@ -43,9 +43,6 @@ export const getSinglePicture = async (req, res) => {
         }
 
         // Authorization check (important)
-        if (pic.user.toString() !== req.user.id) {
-            return res.json({ message: "Not authorized to view this post" })
-        }
 
         // Return post
         return res.json({
@@ -139,38 +136,3 @@ export const deletePost = async (req, res) => {
 
 }
 
-//Like Picture
-export const likePicture = async (req, res) => {
-    try {
-        const id = req.params.id
-
-        const picture = await post_model.findById(id)
-
-        if (!picture) {
-            return res.status(404).json({ message: "Invalid Id" })
-        }
-
-        // Prevent liking own post
-        if (picture.user.toString() === req.user.id) {
-            return res.status(403).json({ message: "Cannot like your own picture" })
-        }
-
-        // Atomic update (IMPORTANT)
-        const updatedPost = await post_model.findByIdAndUpdate(
-            id,
-            { $inc: { likes: 1 } },
-            { new: true }
-        )
-
-        return res.json({
-            message: "Picture successfully liked",
-            post: updatedPost
-        })
-
-    } catch (error) {
-        return res.status(500).json({
-            message: "Server Error",
-            error: error.message
-        })
-    }
-}

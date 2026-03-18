@@ -22,10 +22,11 @@ const postSchema = new mongoose.Schema({
         ref: "credentials",
         required: true
     },
-    likes:{
-        type:Number,
-        default:0
-    }
+    likes:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"credentials",
+        unique:true
+    }]
 }, {
     timestamps: true
 })
